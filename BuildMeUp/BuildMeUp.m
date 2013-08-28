@@ -12,41 +12,50 @@
 @implementation BuildMeUp
 
 @synthesize audioPlayer = _audioPlayer;
+@synthesize buttercupPath = _buttercupPath;
+@synthesize startTime = _startTime;
+@synthesize endTime = _endTime;
+
+-(id)init{
+    self = [super init];
+    if (!_buttercupPath) {
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *documentsDirectory = [paths objectAtIndex:0];
+        _buttercupPath = [documentsDirectory stringByAppendingPathComponent:@"buttercup.mp3"];
+    }
+    _startTime = 10;
+    _endTime = 15;
+    return self;
+}
 
 - (void)chillTheButtercupOut{
     NSLog(@"Butter my arse.");
-    [_audioPlayer pauseWithFadeOut_AG];
+    [_audioPlayer stopWithFadeOutDuration_AG:5 completion:^{
+        exit(EXIT_SUCCESS);
+    }];
         
 }
 
 
 - (void)buildMeUpPlease{
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString *filePath = [documentsDirectory stringByAppendingPathComponent:@"buttercup.mp3"];
-
     
     if (_audioPlayer) {
         [_audioPlayer stop];
         _audioPlayer = nil;
     }
     
-    NSLog(@"%@", filePath);
     
-    _audioPlayer=[[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL fileURLWithPath: filePath] error:NULL];
+    _audioPlayer=[[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL fileURLWithPath: _buttercupPath] error:NULL];
     _audioPlayer.delegate = self;
+    
+    _audioPlayer.currentTime = _startTime;
+    
     [_audioPlayer play];
     
-    CGFloat seconds = 9.0f;
-    _audioPlayer.currentTime = seconds;
-    
-    
-    CGFloat endTime = 10.f;
     
     while (_audioPlayer.isPlaying) {
-        if (_audioPlayer.currentTime >= endTime + seconds) {
-            [self chillTheButtercupOut];
-            usleep(5000);
+        if (_audioPlayer.currentTime >= _endTime) {
+            [_audioPlayer stop];
         }
     }
     

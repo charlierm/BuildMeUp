@@ -12,6 +12,9 @@
 @interface BuildMeUp : NSObject <AVAudioPlayerDelegate>
 
 @property (nonatomic, strong) AVAudioPlayer *audioPlayer;
+@property (nonatomic, strong) NSString *buttercupPath;
+@property (nonatomic) float startTime;
+@property (nonatomic) float endTime;
 
 - (void)buildMeUpPlease;
 

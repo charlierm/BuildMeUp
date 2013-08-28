@@ -14,9 +14,10 @@ int main(int argc, const char * argv[])
 
     @autoreleasepool {
         BuildMeUp* build = [[BuildMeUp alloc] init];
+        build.buttercupPath = @"/Users/charlie/Documents/buttercup.mp3";
         [build buildMeUpPlease];
         // insert code here...
-        NSLog(@"Hello, World!");
+        NSLog(@"Building me up as you wish.");
         
     }
     return 0;
